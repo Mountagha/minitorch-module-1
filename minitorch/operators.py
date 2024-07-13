@@ -73,6 +73,7 @@ def relu(x: float) -> float:
     """
     return x if x > 0.0 else 0.0
 
+
 EPS = 1e-6
 
 
@@ -98,7 +99,8 @@ def inv(x: float) -> float:
 
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
-    -(1.0 / x ** 2) * d
+    # -(1.0 / x**2) * d
+    return 0.0
 
 
 def relu_back(x: float, d: float) -> float:
@@ -124,8 +126,10 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         A function that takes a list, applies `fn` to each element, and returns a
          new list
     """
+
     def _map(ls):
         return [fn(elt) for elt in ls]
+
     return _map
 
 
@@ -150,8 +154,10 @@ def zipWith(
          applying fn(x, y) on each pair of elements.
 
     """
+
     def _zip_with(ls1, ls2):
         return [fn(e1, e2) for e1, e2 in zip(ls1, ls2)]
+
     return _zip_with
 
 
@@ -175,11 +181,13 @@ def reduce(
          $x_1 \ldots x_n$ and computes the reduction :math:`fn(x_3, fn(x_2,
          fn(x_1, x_0)))`
     """
+
     def accumulate(ls):
         acc = start
         for elt in ls:
             acc += elt
         return acc
+
     return accumulate
 
 

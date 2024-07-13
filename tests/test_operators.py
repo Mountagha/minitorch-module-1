@@ -107,6 +107,7 @@ def test_sigmoid(a: float) -> None:
     * It crosses 0 at 0.5
     * It is  strictly increasing.
     """
+
     def is_strictly_increasing(f, start, end, step):
         x = start
         prev_value = f(x)
@@ -125,7 +126,7 @@ def test_sigmoid(a: float) -> None:
         assert_close(1 - sigmoid(a), sigmoid(-a))
     if a == 0:
         assert sigmoid(a) == 0.5
-    assert is_strictly_increasing(sigmoid, 0.0, 1.0, 0.1) 
+    assert is_strictly_increasing(sigmoid, 0.0, 1.0, 0.1)
 
 
 @pytest.mark.task0_2
@@ -145,6 +146,7 @@ def test_symmetric(a: float, b: float) -> None:
     """
     assert_close(mul(a, b), mul(b, a))
 
+
 @pytest.mark.task0_2
 @given(small_floats, small_floats, small_floats)
 def test_distribute(a: float, b: float, c: float) -> None:
@@ -153,6 +155,7 @@ def test_distribute(a: float, b: float, c: float) -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     assert_close(mul(c, add(a, b)), add(mul(c, a), mul(c, b)))
+
 
 @pytest.mark.task0_2
 @given(small_floats)
@@ -163,7 +166,6 @@ def test_other(a: float) -> None:
     # easy the negative of a negative is positive (wa out idea so.)
     if a < 0:
         assert neg(a) == -a
-    
 
 
 # ## Task 0.3  - Higher-order functions
@@ -192,6 +194,7 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
     assert_close(sum(ls1) + sum(ls2), sum(ls1 + ls2))
+
 
 @pytest.mark.task0_3
 @given(lists(small_floats))
