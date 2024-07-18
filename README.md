@@ -1,4 +1,4 @@
-# MiniTorch Module 1  
+# MiniTorch Module 1
 
 <img src="https://minitorch.github.io/_images/match.png" width="100px">
 

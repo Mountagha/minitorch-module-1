@@ -1,5 +1,7 @@
+from copy import copy
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Tuple
+from queue import Queue
+from typing import Any, Dict, Iterable, List, Tuple
 
 from typing_extensions import Protocol
 
@@ -66,8 +68,19 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    variables: Iterable[Variable] = Queue()
+    visited = set()
+
+    def _build_topological(v: Variable):
+        if v not in visited:
+            visited.add(v)
+            if not v.is_constant():
+                variables.put(v)
+            for e in v.parents:
+                _build_topological(e)
+
+    _build_topological(variable)
+    return variables
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -81,8 +94,20 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    variables = topological_sort(variable)
+    scalar_deriv: Dict[Variable, Any] = dict()
+    scalar_deriv[variable] = deriv
+    while not variables.empty():
+        current_var = variables.get()
+        current_deriv = scalar_deriv[current_var]
+        if current_var.is_leaf():
+            current_var.accumulate_derivative(current_deriv)
+        else:
+            for v, d in current_var.chain_rule(current_deriv):
+                if v in scalar_deriv:
+                    scalar_deriv[v] += d
+                else:
+                    scalar_deriv[v] = d
 
 
 @dataclass

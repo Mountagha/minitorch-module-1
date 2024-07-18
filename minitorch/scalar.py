@@ -82,6 +82,9 @@ class Scalar:
     def __repr__(self) -> str:
         return "Scalar(%f)" % self.data
 
+    def __hash__(self) -> int:
+        return hash((self.data, self.unique_id))  # so that it can be used in a dict/set
+
     def __mul__(self, b: ScalarLike) -> Scalar:
         return Mul.apply(self, b)
 
@@ -164,7 +167,13 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        derivatives = self.backward(d_output)
+        local_derivatives: Iterable[Tuple[Variable, Any]] = []
+
+        derivatives = h.last_fn._backward(h.ctx, d_output)
+        for index, var in enumerate(h.inputs):
+            if not var.is_constant():
+                local_derivatives.append((var, derivatives[index]))
+        return local_derivatives
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """
