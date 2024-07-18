@@ -164,8 +164,7 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        derivatives  = self.backward(d_output)
-        
+        derivatives = self.backward(d_output)
 
     def backward(self, d_output: Optional[float] = None) -> None:
         """
