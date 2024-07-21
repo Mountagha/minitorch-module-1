@@ -1,6 +1,4 @@
-from copy import copy
 from dataclasses import dataclass
-from queue import Queue
 from typing import Any, Dict, Iterable, List, Tuple
 
 from typing_extensions import Protocol
@@ -68,18 +66,19 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    variables: Iterable[Variable] = Queue()
+    variables: Iterable[Variable] = []
     visited = set()
 
     def _build_topological(v: Variable):
         if v not in visited:
             visited.add(v)
-            if not v.is_constant():
-                variables.put(v)
             for e in v.parents:
                 _build_topological(e)
+            if not v.is_constant():
+                variables.append(v)
 
     _build_topological(variable)
+    variables.reverse()
     return variables
 
 
@@ -95,10 +94,10 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     variables = topological_sort(variable)
+    
     scalar_deriv: Dict[Variable, Any] = dict()
     scalar_deriv[variable] = deriv
-    while not variables.empty():
-        current_var = variables.get()
+    for current_var in variables:
         current_deriv = scalar_deriv[current_var]
         if current_var.is_leaf():
             current_var.accumulate_derivative(current_deriv)

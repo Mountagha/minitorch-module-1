@@ -172,11 +172,13 @@ class Exp(ScalarFunction):
 
     @staticmethod
     def forward(ctx: Context, a: float) -> float:
+        ctx.save_for_backward(a)
         return operators.exp(a)
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> float:
-        return operators.exp(d_output)
+        (a,) = ctx.saved_values
+        return d_output * operators.exp(a)
 
 
 class LT(ScalarFunction):

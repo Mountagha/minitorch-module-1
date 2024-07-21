@@ -104,8 +104,7 @@ class Scalar:
         return LT.apply(self, b)
 
     def __gt__(self, b: ScalarLike) -> Scalar:
-        lt = LT.apply(self, b)
-        return Scalar(abs(1.0 - self.data), self.history, self.name)
+        return LT.apply(b, self)
 
     def __eq__(self, b: ScalarLike) -> Scalar:  # type: ignore[override]
         return EQ.apply(self, b)
@@ -117,7 +116,7 @@ class Scalar:
         return Neg.apply(self)
 
     def __radd__(self, b: ScalarLike) -> Scalar:
-        return self + b
+        return Add.apply(b, self)
 
     def __rmul__(self, b: ScalarLike) -> Scalar:
         return self * b
@@ -184,7 +183,7 @@ class Scalar:
                                    (typically left out, and assumed to be 1.0).
         """
         if d_output is None:
-            d_output = 1.0
+            d_output = 0.0
         backpropagate(self, d_output)
 
 
