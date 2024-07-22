@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, Optional, Sequence, Tuple
+from typing import Any, Dict, Generator, Optional, Sequence, Tuple
 
 
 class Module:
@@ -32,7 +32,7 @@ class Module:
     def train(self) -> None:
         "Set the mode of this module and all descendent modules to `train`."
 
-        def set_train(current_module):
+        def set_train(current_module: Module) -> None:
             current_module.training = True
             for m in current_module.modules():
                 set_train(m)
@@ -42,7 +42,7 @@ class Module:
     def eval(self) -> None:
         "Set the mode of this module and all descendent modules to `eval`."
 
-        def set_eval(current_module):
+        def set_eval(current_module: Module) -> None:
             current_module.training = False
             for m in current_module.modules():
                 set_eval(m)
@@ -58,7 +58,9 @@ class Module:
             The name and `Parameter` of each ancestor parameter.
         """
 
-        def collect(current_module, prefix=""):
+        def collect(
+            current_module: Module, prefix: str = ""
+        ) -> Generator[Tuple[str, Parameter], Any, Any]:
             for name, parameter in current_module._parameters.items():
                 yield prefix + name, parameter
             for name, module in current_module._modules.items():

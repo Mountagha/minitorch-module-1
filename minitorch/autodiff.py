@@ -56,7 +56,7 @@ class Variable(Protocol):
         pass
 
 
-def topological_sort(variable: Variable) -> Iterable[Variable]:
+def topological_sort(variable: Variable) -> List[Variable]:
     """
     Computes the topological order of the computation graph.
 
@@ -66,10 +66,10 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    variables: Iterable[Variable] = []
+    variables: List[Variable] = []
     visited = set()
 
-    def _build_topological(v: Variable):
+    def _build_topological(v: Variable) -> None:
         if v not in visited:
             visited.add(v)
             for e in v.parents:
@@ -94,7 +94,7 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     variables = topological_sort(variable)
-    
+
     scalar_deriv: Dict[Variable, Any] = dict()
     scalar_deriv[variable] = deriv
     for current_var in variables:

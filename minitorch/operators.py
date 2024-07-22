@@ -127,7 +127,7 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
          new list
     """
 
-    def _map(ls):
+    def _map(ls: Iterable[float]) -> Iterable[float]:
         return [fn(elt) for elt in ls]
 
     return _map
@@ -155,7 +155,7 @@ def zipWith(
 
     """
 
-    def _zip_with(ls1, ls2):
+    def _zip_with(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
         return [fn(e1, e2) for e1, e2 in zip(ls1, ls2)]
 
     return _zip_with
@@ -182,7 +182,7 @@ def reduce(
          fn(x_1, x_0)))`
     """
 
-    def accumulate(ls):
+    def accumulate(ls: Iterable[float]) -> float:
         acc = start
         for elt in ls:
             acc += elt

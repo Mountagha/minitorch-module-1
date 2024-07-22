@@ -108,7 +108,9 @@ def test_sigmoid(a: float) -> None:
     * It is  strictly increasing.
     """
 
-    def is_strictly_increasing(f, start, end, step):
+    def is_strictly_increasing(
+        f: Callable[[float], float], start: float, end: float, step: float
+    ) -> bool:
         x = start
         prev_value = f(x)
         x += step

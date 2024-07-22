@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable, Optional, Sequence, Tuple, Type, Union
+from typing import Any, Iterable, List, Optional, Sequence, Tuple, Type, Union
 
 import numpy as np
 
@@ -166,7 +166,7 @@ class Scalar:
         assert h.last_fn is not None
         assert h.ctx is not None
 
-        local_derivatives: Iterable[Tuple[Variable, Any]] = []
+        local_derivatives: List[Tuple[Variable, Any]] = []
 
         derivatives = h.last_fn._backward(h.ctx, d_output)
         for index, var in enumerate(h.inputs):
@@ -183,7 +183,7 @@ class Scalar:
                                    (typically left out, and assumed to be 1.0).
         """
         if d_output is None:
-            d_output = 0.0
+            d_output = 1.0
         backpropagate(self, d_output)
 
 
