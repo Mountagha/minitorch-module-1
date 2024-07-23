@@ -54,7 +54,7 @@ class ScalarFunction:
                 raw_vals.append(v.data)
             else:
                 scalars.append(minitorch.scalar.Scalar(v))
-                raw_vals.append(v)
+                raw_vals.append(float(v))
 
         # Create the context.
         ctx = Context(False)
@@ -109,7 +109,7 @@ class Mul(ScalarFunction):
     @staticmethod
     def backward(ctx: Context, d_output: float) -> Tuple[float, float]:
         (a, b) = ctx.saved_values
-        return b * d_output, a * d_output
+        return operators.mul(b, d_output), operators.mul(a, d_output)
 
 
 class Inv(ScalarFunction):
@@ -190,7 +190,7 @@ class LT(ScalarFunction):
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> Tuple[float, float]:
-        return d_output, d_output
+        return 0.0, 0.0
 
 
 class EQ(ScalarFunction):
@@ -202,4 +202,4 @@ class EQ(ScalarFunction):
 
     @staticmethod
     def backward(ctx: Context, d_output: float) -> Tuple[float, float]:
-        return d_output, d_output
+        return 0.0, 0.0

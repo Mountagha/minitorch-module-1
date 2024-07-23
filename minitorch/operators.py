@@ -94,13 +94,12 @@ def log_back(x: float, d: float) -> float:
 
 def inv(x: float) -> float:
     "$f(x) = 1/x$"
-    return 1.0 / (x + EPS)
+    return 1.0 / x
 
 
 def inv_back(x: float, d: float) -> float:
     r"If $f(x) = 1/x$ compute $d \times f'(x)$"
-    # -(1.0 / x**2) * d
-    return 0.0
+    return -(1.0 / x**2) * d
 
 
 def relu_back(x: float, d: float) -> float:

@@ -27,8 +27,7 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     f_x_plus_h = f(*l)
     l[arg] -= 2 * epsilon
     f_x_moins_h = f(*l)
-
-    return (f_x_plus_h - f_x_moins_h) / 2 * epsilon
+    return (f_x_plus_h - f_x_moins_h) / (2 * epsilon)
 
 
 variable_count = 1
@@ -107,7 +106,6 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
                     scalar_deriv[v] += d
                 else:
                     scalar_deriv[v] = d
-
 
 @dataclass
 class Context:
